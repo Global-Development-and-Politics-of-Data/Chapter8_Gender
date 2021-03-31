@@ -1,0 +1,91 @@
+---
+title: 'IntersectionalityAnalysis'
+output: 
+  html_document: 
+    number_sections: yes
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+```{r, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(kableExtra)
+library(estimatr)
+library(wec)
+library(table1)
+library(haven)
+library(survey)
+library(jtools)
+library(remotes)
+library(svrepmisc)
+```
+```{r,}
+dat <- read.csv("menwomenR.csv")
+```
+```{r,}
+data <- svydesign(id=~mv001, weights=~mv005, nest=TRUE, survey.lonely.psu = "adjust", data=dat)
+```
+
+```{r}
+#Running Regression - Model1
+library(data.table)
+model0 <- svyglm(education~female, design = data)
+male <- model0$coefficients[1]
+female <- model0$coefficients[1]+model0$coefficients[2]
+table1 <- data.table(male,female)%>% gather(gender,education)
+table1
+```
+
+```{r,}
+table1 %>%
+  mutate(gender = factor(gender)) %>%
+  ggplot(aes(x = reorder(gender,education), y= education, fill = gender)) +
+    geom_bar(position = 'dodge', stat = 'identity')+
+    ggtitle("Education by gender")+
+    xlab("gender")+ 
+    ylab("years of education")+
+    labs(subtitle = "Females in India are 1.5 years on average less educated than males",
+       caption = "Source: India DHS 2015-16 (www.dhs.org)")+
+    theme(plot.title = element_text(hjust = 0.5),plot.caption = element_text(hjust = 0))
+    
+ggsave(file = "Gender.png")
+
+```
+
+
+```{r,}
+#Running Regression - Model 2
+model1 <- svyglm(education~female+muslim+sc+female_muslim_sc, design = data)
+summary(model1)
+m_hindu_highcaste <- model1$coefficients[1]
+m_hindu_lowcaste <- model1$coefficients[1]+model1$coefficients[4]
+m_muslim_highcaste <- model1$coefficients[1]+model1$coefficients[3]
+m_muslim_lowcaste <- model1$coefficients[1]+model1$coefficients[3]+model1$coefficients[4]
+f_hindu_highcaste <- model1$coefficients[1]+model1$coefficients[2]
+f_hindu_lowcaste <- model1$coefficients[1]+model1$coefficients[2]+model1$coefficients[3]
+f_muslim_highcaste <-model1$coefficients[1]+model1$coefficients[2]+model1$coefficients[3]
+f_muslim_lowcaste<-model1$coefficients[1]+model1$coefficients[2]+model1$coefficients[3]+model1$coefficients[4]+model1$coefficients[5]
+
+table2 <- data.table(m_hindu_highcaste,m_hindu_lowcaste,m_muslim_highcaste,m_muslim_lowcaste,f_hindu_highcaste,f_hindu_lowcaste, f_muslim_highcaste, f_muslim_lowcaste) %>% gather(group,education)%>% mutate(religion_caste=str_sub(group, 3),gender = substr(group,1,1),group=NULL)
+table2$gender[table2$gender == "f"] <- "Female"
+table2$gender[table2$gender == "m"] <- "Male"
+table2
+```
+
+```{r}
+#PLOT 2 - 
+table2 %>%
+  mutate(gender = factor(gender), religion_caste = factor(religion_caste)) %>%
+  group_by(gender, religion_caste) %>%
+  group_by(gender) %>%
+  ggplot(aes(x = reorder(religion_caste,education), y= education, fill = gender)) +
+    geom_bar(position = 'dodge', stat = 'identity')+
+    ggtitle("Education by gender, religion and caste")+
+    xlab("religion and caste")+ 
+    ylab("years of education")+
+    labs(subtitle = "Interacting gender with religion and caste shows a gruesome story for lower caste muslim women",
+       caption = "Source:India DHS 2015-16 (www.dhs.org)")+
+    theme(plot.title = element_text(hjust = 0.5),plot.caption = element_text(hjust = 0))
+    
+ggsave(file = "Interaction.png")
+```
