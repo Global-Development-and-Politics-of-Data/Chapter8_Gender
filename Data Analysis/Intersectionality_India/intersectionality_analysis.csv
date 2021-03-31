@@ -1,0 +1,29 @@
+,-1,-2,-3
+,education in single years,education in single years,education in single years
+,b/se,b/se,b/se
+female,-1.616***,-1.656***,-1.551***
+,-0.05,-0.06,-0.05
+muslim,,-1.856***,-3.000***
+,,-0.17,-0.09
+female_muslim,,0.442**,
+,,-0.17,
+lowercaste,,,-3.214***
+,,,-0.05
+female_muslim_lowercaste,,,1.584***
+,,,-0.18
+Constant,8.907***,9.119***,10.689***
+,-0.06,-0.06,-0.06
+Observations,282813,282813,282813
+"=""* p<0.05", ** p<0.01," *** p<0.001""",
+,,,
+,,,
+,Model 3,,
+Education in years,female,male,
+muslim_lowercaste,4.508,4.475,
+hindu_lowercaste,5.924,7.475,
+muslim_uppercaste,6.138,7.689,
+hindu_uppercaste,9.138,10.689,
+,,,
+,Education in years,,
+female,7.291,,
+male,8.907,,
