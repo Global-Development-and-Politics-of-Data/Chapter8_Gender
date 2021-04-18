@@ -1,0 +1,105 @@
+---
+title: "Ranking Analysis Graph"
+author:
+date: 
+output: pdf_document
+---
+
+```{r setup, warning=FALSE, message=FALSE}
+## Download Packages
+library(ggplot2)
+library(dplyr)
+```
+Import data from GitHub repository. See [LINK](https://github.com/Global-Development-and-Politics-of-Data/Chapter8_Gender).
+```{r}
+RA_clean = read.csv("RankingAnalysis_clean.csv") 
+```
+Create Plot 1: "Top 5 Global Gender Gap Scores by Country (2018)"
+```{r}
+#PLOT 1 - Top Five GGG Scores
+plot1 = (RA_clean %>%
+  mutate(GGGRank = factor(ggg_rank18), Country = factor(country)) %>%
+  group_by(GGGRank, Country) %>%
+  group_by(Country) %>%
+  arrange(desc(ggg_2018)) %>%
+  head(5)%>%
+  ggplot(aes(x = reorder(Country, ggg_2018), y= ggg_2018, fill = GGGRank)) +
+  geom_bar(position = 'dodge', stat = 'identity')+
+  geom_text(aes(label=ggg_2018), position=position_dodge(width=0.9), vjust=-0.25)+
+  ggtitle("Top 5 Global Gender Gap Scores by Country (2018)")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  xlab("Country")+
+  ylab("Global Gender Gap Score (0-1)")+
+  theme_minimal()
+  )
+plot1 + scale_y_continuous(limit = c(0,1), breaks = seq(0,1,.05))
+```
+Create Plot 2: "Bottom 5 Global Gender Gap Scores by Country (2018)"
+```{r}
+#PLOT 2 - Bottom Five GGG Scores
+plot2 = (RA_clean %>%
+  mutate(GGGRank = factor(ggg_rank18), Country = factor(country)) %>%
+  group_by(GGGRank, Country) %>%
+  group_by(Country) %>%
+  arrange(ggg_2018) %>%
+  head(5)%>%
+  ggplot(aes(x = reorder(Country, ggg_2018), y= ggg_2018, fill = GGGRank)) +
+  geom_bar(position = 'dodge', stat = 'identity')+
+  geom_text(aes(label=ggg_2018), position=position_dodge(width=0.9), vjust=-0.25)+
+  ggtitle("Bottom 5 Global Gender Gap Scores by Country (2018)")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  xlab("Country")+
+  ylab("Global Gender Gap Score (0-1)")+
+  theme_minimal()
+)
+plot2 + scale_y_continuous(limit = c(0,1), breaks = seq(0,1,.05))
+```
+Create Plot 3: "Top 5 Gender Inequality Index Scores by Country (2018)"
+```{r}
+# PLOT 3 - Top Five GII Scores
+plot3 = (RA_clean %>%
+  mutate(GIIRank = factor(gii_rank18), Country = factor(country)) %>%
+  group_by(GIIRank, Country) %>%
+  group_by(Country) %>%
+  arrange(gii_2018)%>%
+  head(5)%>%
+  ggplot(aes(x = reorder(Country, gii_2018), y= gii_2018, fill = GIIRank))+
+  geom_bar(position = 'dodge', stat = 'identity')+
+  geom_text(aes(label=gii_2018), position=position_dodge(width=0.9), vjust=-0.25)+
+  ggtitle("Top 5 Global Inequality Index Scores by Country (2018)")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  xlab("Country")+
+  ylab("Global Inequality Index Score (0-1)")+
+  theme_minimal()
+)
+plot3 + scale_y_continuous(limit = c(0,1), breaks=seq(0,1,.05))
+```
+Create Plot 4: "Bottom 5 Global Inequality Index Scores by Country (2018)"
+```{r}
+#PLOT 4 - Bottom Five GII Scores
+plot4 = (RA_clean %>%
+  mutate(GIIRank = factor(gii_rank18), Country = factor(country)) %>%
+  group_by(GIIRank, Country) %>%
+  group_by(Country) %>%
+  arrange(desc(gii_2018))%>%
+  head(5)%>%
+  ggplot(aes(x = reorder(Country, gii_2018), y= gii_2018, fill = GIIRank))+
+  geom_bar(position = 'dodge', stat = 'identity')+
+  geom_text(aes(label=gii_2018), position=position_dodge(width=0.9), vjust=-0.25)+
+  theme(plot.title = element_text(hjust = 0.5))+
+  ggtitle("Bottom 5 Global Inequality Index Scores by Country (2018)")+
+  xlab("Country")+
+  ylab("Global Inequality Index Score (0-1)")+
+  theme_minimal()
+) 
+plot4 + scale_y_continuous(limit = c(0,1), breaks=seq(0,1,.05))
+```
+
+
+
+
+
+
+
+
+
