@@ -1,0 +1,101 @@
+---
+title: "Ranking Analysis Data Cleaning"
+author: 
+date: 
+output: pdf_document
+---
+
+```{r setup, warning=FALSE, message=FALSE}
+## Download Packages
+library(readxl)
+library(rio)
+library(stringr)
+library(dplyr)
+library(tidyr)
+library(countrycode)
+```
+Import data from GitHub repository. See [LINK](https://github.com/Global-Development-and-Politics-of-Data/Chapter8_Gender).
+```{r, warning=FALSE, message=FALSE}
+GII = read_excel("Gender Inequality Index_AllYears.xlsx") 
+GGG = read_excel("Global Gender Gap_AllYears.xlsx")
+GGGRank = read_excel("RankingAnalysisAndGGGRank.xlsx")
+```
+Clean the GGG Data
+```{r}
+# Subset dataframe to only contain variables of interest with the dplyr select() command
+ggg_1 = GGG %>% select(`Country ISO3`, `Country Name`, `Indicator Id`, `2018`)
+
+# Subset the dataframe to only include the "Overall Global Gender Gap Index" indicator
+  # Do this by "Indicator Id" value and with the dplyr filter() command
+  # The Indicator Id for the "Overall Global Gender Gap Index" is 27959
+ggg_2 = ggg_1 %>% filter(`Indicator Id`== "27959")
+
+# Rename the country code column and year in preparation for the merge
+  # Do this with the dplyr rename() command
+ggg_3 = ggg_2 %>% 
+  rename(country_code = `Country ISO3`, ggg_2018 = `2018`)
+
+# Delete the unnecessary "Indicator Id" and "Country Name" variables in preparation to merge data
+ggg_3$`Indicator Id`= NULL
+ggg_3$`Country Name`= NULL
+```
+Clean the GII Data
+```{r}
+# Subset dataframe to only contain variables of interest with the dplyr select() command
+gii_1 = GII %>% select(`Country`, `2018`, `GII ranking`)
+
+# Change the year column in preparation for the merge with the dplyr rename() command
+gii_1 = gii_1 %>% 
+  rename(gii_2018 = `2018`, gii_rank18 = `GII ranking`, country = `Country`)
+
+# Remove non-countries from the GII dataframe with the dplyr filter() command
+ gii_2 = gii_1 %>% filter(country!= "Very high human development",
+                          country!= "Europe and Central Asia",
+                          country!= "South Asia",
+                          country!= "World",
+                           country!= "Organization for Economic Co-operation and Development",
+                           country!= "	Europe and Central Asia",
+                           country!= "East Asia and the Pacific",
+                           country!= "High human development",
+                           country!= "Latin America and the Caribbean",
+                           country!= "Small Island Developing States",
+                           country!= "Developing Countries",
+                           country!= "Medium human development",
+                           country!= "Arab States",
+                           country!= "Least Developed Countries",
+                           country!= "Sub-Saharan Africa",
+                           country!= "Low human development",
+                           country!= "Human Development",
+                           country!= "Regions",
+                           country!= ""
+                         ) 
+
+# Add ISO3 country codes to GII dataframe with the countrycode package
+gii_2$country_code = countrycode(sourcevar = gii_2$country,
+                                           origin = "country.name",
+                                           destination = "iso3c", 
+                                           warn = TRUE)
+
+```
+Merge the clean GGG and GII dataframes with the GGGRank dataframe.
+```{r, warning=FALSE}
+# Use the dplyr merge() command
+data_merge1 = merge(ggg_3, gii_2, by = "country_code")
+data_merge2 = merge(data_merge1, GGGRank, by = "country_code")
+
+# Check variable classes
+class(data_merge2$country_code) 
+class(data_merge2$ggg_2018)
+class(data_merge2$country)
+class(data_merge2$gii_2018) # "character" needs to be changed to "numeric"
+class(data_merge2$gii_rank18)
+class(data_merge2$ggg_rank18)
+
+# Change the class of gii_2018 from "character" to "numeric."
+data_merge2$gii_2018 = as.numeric(as.character(data_merge2$gii_2018))
+```
+Export the clean data. This dataframe will be used to create data visualizations. 
+```{r}
+export(data_merge2, "RankingAnalysis_clean.csv")
+```
+
