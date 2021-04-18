@@ -1,0 +1,93 @@
+---
+title: 'IntersectionalityAnalysis for Ethiopia'
+output: 
+  html_document: 
+    number_sections: yes
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+```{r, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(kableExtra)
+library(estimatr)
+library(wec)
+library(table1)
+library(haven)
+library(survey)
+library(jtools)
+library(remotes)
+library(svrepmisc)
+```
+```{r,}
+dat <- read.csv("menwomenR_ethp.csv")
+```
+```{r,}
+dat <- dat %>% mutate(bankaccount = str_replace_all(bankaccount, "no", "0")) %>% mutate(bankaccount = str_replace_all(bankaccount, "yes", "1"))
+dat$bankaccount <- as.numeric(as.character(dat$bankaccount))
+dat$female <- as.numeric(dat$female)
+
+data <- svydesign(id=~mv001, weights=~mv005, nest=TRUE, survey.lonely.psu = "adjust", data=dat)
+```
+
+```{r}
+#Running Regression - Model1
+library(data.table)
+model0 <- svyglm(bankaccount~female, design = data)
+male <- ((model0$coefficients[1])*100)
+female <- ((model0$coefficients[1]+model0$coefficients[2])*100)
+table1 <- data.table(male,female)%>% gather(gender,bankaccount)
+table1
+```
+
+```{r,}
+table1 %>%
+  mutate(gender = factor(gender)) %>%
+  ggplot(aes(x = reorder(gender,bankaccount), y= bankaccount, fill = gender)) +
+    geom_bar(position = 'dodge', stat = 'identity')+
+    ggtitle("BankAccount by gender")+
+    xlab("gender")+ 
+    ylab("% Own Bank account")+
+    labs(caption = "Source: Ethiopia DHS 2016 (www.dhs.org)")+
+    theme(plot.title = element_text(hjust = 0.5),plot.caption = element_text(hjust = 0))
+    
+ggsave(file = "Gender_Eth.png")
+```
+
+
+```{r,}
+#Running Regression - Model 2
+model1 <- svyglm(bankaccount~female+muslim+rural+female_muslim_rural, design = data)
+summary(model1)
+m_urban_orth <- (model1$coefficients[1])*100
+m_rural_orth <- (model1$coefficients[1]+model1$coefficients[4])*100
+m_urban_muslim <- (model1$coefficients[1]+model1$coefficients[3])*100
+m_rural_muslim <- (model1$coefficients[1]+model1$coefficients[3]+model1$coefficients[4])*100
+f_urban_orth <- (model1$coefficients[1]+model1$coefficients[2])*100
+f_rural_orth <- (model1$coefficients[1]+model1$coefficients[2]+model1$coefficients[4])*100
+f_urban_muslim <-(model1$coefficients[1]+model1$coefficients[2]+model1$coefficients[3])*100
+f_rural_muslim<- (model1$coefficients[1]+model1$coefficients[2]+model1$coefficients[3]+model1$coefficients[4]+model1$coefficients[5])*100
+
+table2 <- data.table(m_urban_orth,m_urban_muslim,m_rural_orth,m_rural_muslim,f_urban_orth, f_urban_muslim, f_rural_orth, f_rural_muslim) %>% gather(group,bankaccount)%>% mutate(region_religion=str_sub(group, 3),gender = substr(group,1,1),group=NULL)
+table2$gender[table2$gender == "f"] <- "Female"
+table2$gender[table2$gender == "m"] <- "Male"
+table2
+```
+
+```{r}
+#PLOT 2 - 
+table2 %>%
+  mutate(gender = factor(gender), region_religion = factor(region_religion)) %>%
+  group_by(gender, region_religion) %>%
+  group_by(gender) %>%
+  ggplot(aes(x = reorder(region_religion,bankaccount), y= bankaccount, fill = gender)) +
+    geom_bar(position = 'dodge', stat = 'identity')+
+    ggtitle("Bank Account by gender, region, and religion")+
+    xlab("region and religion")+ 
+    ylab("% bank account ownership")+
+    labs(caption = "Source:Ethiopia DHS 2016 (www.dhs.org)")+
+    theme(plot.title = element_text(hjust = 0.5),plot.caption = element_text(hjust = 0))+
+  coord_flip()
+    
+ggsave(file = "Interaction_eth.png")
+```
