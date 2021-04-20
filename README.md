@@ -25,7 +25,7 @@ e.	RankingAnalysisAndGGGRank — These data come from “Table 1 The Global Gend
 Format of the data—
 The data are stored in excel format. 
 
-Note – In order to access the DHS survey data, the project needs to be registered. Once the project is registered and the data access is requested, dhs provides access to the datasets. These datasets cannot be shared with any other person than the co-authors who are registered for the project. Therefore, the DHS data has not been shared with the students. Students can register themselves at the dhsprogram.com and get access to the datasets. The data on rankings are public and hence shared.
+Note – In order to access the DHS survey data, the project needs to be registered. Once the project is registered and the data access is requested, dhs provides access to the datasets. These datasets cannot be shared with any other person than the co-authors who are registered for the project. Therefore, the DHS data has not been shared with the students. Students can register themselves at the www.dhsprogram.com and get access to the datasets. The data on rankings are public and hence shared.
 
 2.	Data Analysis
 This folder has the following manipulated data 
