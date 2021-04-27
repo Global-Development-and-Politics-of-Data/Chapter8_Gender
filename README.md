@@ -23,10 +23,20 @@ This repository contains the following files:
     * These data come from These data come from “Table 1 The Global Gender Gap Index 2020 rankings” of the [Global Gender Gap 2020 Insight Report](http://www3.weforum.org/docs/WEF_GGGR_2021.pdf). See page 9. Format of the data: The data are stored in excel format.
 
 ## Demographic Health Survey Files
-The section 3 and the data module contain data visualizations based on Demographic Health Survey (DHS) data for Afghanistan, India, and Ethiopia. DHS surveys cannot be shared publicly. However, they are free and accesible to anyone that registers for them at www.dhsprogram.com. DHS files can be viewed and edited by whoever registers and downloads DHS files of his or her intrest. We accesed the following files:
+Section 3 and the data module contain data visualizations based on Demographic Health Survey (DHS) data for Afghanistan, India, and Ethiopia. DHS surveys cannot be shared publicly. However, they are free and accesible to anyone that registers for them at www.dhsprogram.com. DHS files can be viewed and edited by whoever registers and downloads DHS files of his or her intrest. We accesed the following files:
   * Afghanistan_DHS (2015-16)
     * The Afghanistan DHS is downloaded from www.dhsprogram.com/. Format of the data: The dataset are in the .dta (STATA data format). The zip file contains the individual’s recode (data from women), men’s recode (data from men), couple’s recode (data for both men and women), household recode (data at the household level), birth recode (data for children).
   * Ethiopia_DHS (2016)
     * The Ethiopia DHS is downloaded from www.dhsprogram.com/. Format of the data: The dataset are in the .dta (STATA data format). The zip file contains the individual’s recode (data from women), men’s recode (data from men), couple’s recode (data for both men and women), household recode (data at the household level), birth recode (data for children).
   * India_DHS (2015-16) 
     * The India DHS is downloaded from www.dhsprogram.com/. Format of the data: The dataset are in the .dta (STATA data format). The zip file contains the individual’s recode (data from women), men’s recode (data from men), couple’s recode (data for both men and women), household recode (data at the household level), birth recode (data for children).
+
+# Data Analysis
+This folder contains manipulated or edited data. 
+
+## Afghanistan
+The data module's second question is based on the Afghanistan (2015-2016) DHS report. This folder contains data analysis files for the second question of the data module. 
+ * "AfghanistanEmpowermentIndex.xlsx"
+   * These data come from the Afghanistan (2015-2016) DHS report. Format of the data: The data are stored in excel format. These data were used to create the author-made gender empowerment index for the data module.
+
+## Intersectionality_Intersectionality
