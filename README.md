@@ -39,4 +39,38 @@ The data module's second question is based on the Afghanistan (2015-2016) DHS re
  * "AfghanistanEmpowermentIndex.xlsx"
    * These data come from the Afghanistan (2015-2016) DHS report. Format of the data: The data are stored in excel format. These data were used to create the author-made gender empowerment index for the data module.
 
-## Intersectionality_Intersectionality
+## Intersectionality_Ethiopia
+The data module's first question includes a graph made up of data from the Ethiopia (2016) DHS report. This folder contains the edited data that makes up this graph, a replication file for conducting the data analysis that this graph is based on, and a replication file for recreating the graph. 
+* "IntersectionalityGraph_ethp.Rmd"
+   *  This is the replication file for creating the graph in module question #1. With this replication file and "intersectionality_eth.csv" file the graph in module question #1 can be replicated. 
+* "intersectionality_eth.csv"
+   * This is the edited data that makes up the graph in module question #1.
+* "intersectionality_ethp.do"
+   * This is the replication file to recreate the data analysis and edited data ("intersectionality_eth.csv") that makes up the graph in module question #1. Note: to replicate the graph in module question #1, users must first download the Ethiopia (2016) DHS data independently. 
+
+## Intersectionality_India
+Section 3 contains a data visualization based on raw data from the India (2015-2016) DHS data. This folder contains a replication file to recreate the data visualization in section 3, the data file used to conduct the analysis which the visualization diplays, the data file which contains the output of the analysis which the visualization displays, the data file which contains the data used to conduct analysis and create the output which the visualization displays, and the replication file to analyze the raw data that the visualization is based on. 
+* "IntersectionalityGraph.Rmd"
+  * This is the replication file for creating the data visualization in section 3.
+* "intersectionality_analysis.csv"
+  *  This file was used to conduct the data analysis that the data visualization in section 3 is based on.
+* intersectionality_output.csv"
+  * This file contains the output from the data analysis that the data visualization is section 3 is based on.
+* "menwomenR.csv"
+  * This file contains the data that makes up the data visualization in section 3.
+* "womenmen_intersectionality.do"
+  * This is the replication for conducting the data analysis and output which the data visualization in section 3 is based on. 
+
+## Ranking Analysis
+
+
+
+
+
+
+
+
+
+
+
+
