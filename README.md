@@ -10,7 +10,7 @@ This repository contains the following files:
  This folder contains *almost* all raw, unedited data files. 
  
  ## Gender Indices and Ranking Analysis Files
- Section three references the Gender Development Index (GDI) and contains a data visualization which compares the GGG and GII neasures. The following raw data files were used to create this data visualization.
+ Section three references the Gender Development Index (GDI) and Global Inequality Index (GII) and contains a data visualization which compares the GGG and GII neasures. The following raw data files were used to create this data visualization.
   * "Gender Development Index_AllYears.xlsx"
     * These data come from the [United Nations Gender Development Index](http://hdr.undp.org/en/content/gender-development-index-gdi).
   * "Gender Inequality Index_2019.xlsx"
@@ -62,7 +62,20 @@ Section 3 contains a data visualization based on raw data from the India (2015-2
   * This is the replication for conducting the data analysis and output which the data visualization in section 3 is based on. 
 
 ## Ranking Analysis
+Section 3 contains a data visualization based on data from the Gender Development Index (GDI) and Gender Inequality Index (GII). This folder contains a replication file for cleaning the raw data that the data visualization in section 3 is based on, a replication file that recreates the data visualization, and the cleaned data that makes up the data visualization in section 3.
+* "RankingAnalysisCleaning.Rmd"
+  * This is the replication file for cleaning the raw data that the visualization in section 3 is based on.
+* "RankingAnalysisGraph.Rmd"
+  * This is replication file for recreating the data visualization in section 3. 
+* "RankingAnalysis_clean.csv"
+  * This is the cleaned data that the data visualization in section 3 is based on. Using this data file and the replication file, users can recreate the data visualization in section 3. 
 
+
+# Graphs
+This folder contains .png files of the data visualizations included in the chapter and data module.
+
+# Writeups
+This folder contains other files, like the chapter and data module workflows.
 
 
 
