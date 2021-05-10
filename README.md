@@ -73,6 +73,16 @@ Section 3 contains a data visualization based on data from the Gender Developmen
 
 # Graphs
 This folder contains .png files of the data visualizations included in the chapter and data module.
+* "GGG_plot.png"
+  * This is the GGG comparison plot in section 3 of the chapter. 
+* "GII_plot.png"
+  * This is the GII comparison plot in section 3 of the chapter.
+* "Gender_Eth.png"
+  * This is the bank ownership graph (non-interaction) for the Ethiopia example in question 1 in the data module.
+* "Interaction.png"
+  * This is the intraction graph for the India example in section 3 of the chapter.
+* "Interaction_eth.png"
+  * This is the interaction graph for the Ethiopia example in question 1 of the data module. 
 
 # Writeups
 This folder contains other files, like the chapter and data module workflows.
