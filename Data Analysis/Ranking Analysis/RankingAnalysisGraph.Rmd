@@ -1,0 +1,178 @@
+---
+title: "Ranking Analysis Graph"
+author:
+date: 
+output: pdf_document
+---
+
+```{r setup, warning=FALSE, message=FALSE}
+## Download Packages
+library(readxl)
+library(rio)
+library(stringr)
+library(dplyr)
+library(tidyr)
+library(countrycode)
+library(ggplot2)
+library(gridExtra)
+library(grid)
+library(lattice)
+```
+Import data from GitHub repository. See [LINK](https://github.com/Global-Development-and-Politics-of-Data/Chapter8_Gender).
+```{r}
+RA_clean = read.csv("RankingAnalysis_clean.csv") 
+
+# "Syrian Arab Republic" needs to be shortened to accommodate the data visualization
+RA_clean$country = gsub("Syrian Arab Republic", "Syria", RA_clean$country) 
+```
+
+Create Plot 1: "Top 5 Global Gender Gap Scores by Country (2018)"
+```{r}
+#PLOT 1 - Top Five GGG Scores
+plot1 = (RA_clean %>%
+  mutate(GGGRank = factor(ggg_rank18), Country = factor(country)) %>%
+  group_by(GGGRank, Country) %>%
+  group_by(Country) %>%
+  arrange(desc(ggg_2018)) %>%
+  head(5)%>%
+  ggplot(aes(x = reorder(Country, ggg_2018), y= ggg_2018, fill = GGGRank)) +
+  geom_bar(position = 'dodge', stat = 'identity', show.legend = FALSE, fill = "rosybrown2")+
+  geom_text(aes(label=ggg_2018),position=position_dodge(width=0.9),
+            vjust=-0.25, 
+            size = 3, 
+            family = "serif")+
+  ggtitle("Top 5 Global Gender Gap Scores \nby Country (2018)")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  xlab("Country")+
+  ylab("Global Gender Gap Score (0-1)")+
+  theme_minimal()
+  )
+p1 = plot1 + scale_y_continuous(limit = c(0,1), breaks = seq(0,1,.05)) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.20, vjust = .5)) +
+  theme(axis.title.x = element_text(colour = "black")) +
+  theme(axis.title.y = element_text(colour = "gray10")) +
+  theme(plot.title = element_text(hjust = 0.5, colour = "midnightblue", face = "bold"))+
+  theme(text=element_text(family="serif")) +
+  labs(fill = "Rank #", colour = "gray10")
+p1
+```
+
+Create Plot 2: "Bottom 5 Global Gender Gap Scores by Country (2018)"
+```{r}
+#PLOT 2 - Bottom Five GGG Scores
+plot2 = (RA_clean %>%
+  mutate(GGGRank = factor(ggg_rank18), Country = factor(country)) %>%
+  group_by(GGGRank, Country) %>%
+  group_by(Country) %>%
+  arrange(ggg_2018) %>%
+  head(5)%>%
+  ggplot(aes(x = reorder(Country, ggg_2018), y= ggg_2018, fill = GGGRank)) +
+  geom_bar(position = 'dodge', stat = 'identity', show.legend = FALSE, fill = "rosybrown2")+
+  geom_text(aes(label=ggg_2018), position=position_dodge(width=0.9), 
+            vjust=-0.25, 
+            size = 3, 
+            family = "serif")+
+  ggtitle("Bottom 5 Global Gender Gap Scores \nby Country (2018)")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  xlab("Country")+
+  ylab("Global Gender Gap Score (0-1)")+
+  theme_minimal()
+)
+p2 = plot2 + scale_y_continuous(limit = c(0,1), breaks = seq(0,1,.05)) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.20, vjust = .5)) +
+  theme(axis.title.x = element_text(colour = "black")) +
+  theme(axis.title.y = element_text(colour = "gray10")) +
+  theme(plot.title = element_text(hjust = 0.5, colour = "midnightblue", face = "bold"))+
+  theme(text=element_text(family="serif")) +
+  labs(fill = "Rank #", colour = "gray10")
+p2
+```
+
+Create Plot 3: "Top 5 Gender Inequality Index Scores by Country (2018)"
+```{r}
+# PLOT 3 - Top Five GII Scores
+plot3 = (RA_clean %>%
+  mutate(GIIRank = factor(gii_rank18), Country = factor(country)) %>%
+  group_by(GIIRank, Country) %>%
+  group_by(Country) %>%
+  arrange(gii_2018)%>%
+  head(5)%>%
+  ggplot(aes(x = reorder(Country, gii_2018), y= gii_2018, fill = GIIRank))+
+  geom_bar(position = 'dodge', stat = 'identity', show.legend = FALSE, fill = "plum")+
+  geom_text(aes(label=gii_2018), position=position_dodge(width=0.9), 
+            vjust=-0.25, 
+            size = 3, 
+            family = "serif")+
+  ggtitle("Top 5 Global Inequality Index Scores \nby Country (2018)")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  xlab("Country")+
+  ylab("Global Inequality Index Score (0-1)")+
+  theme_minimal()
+)
+p3= plot3 + scale_y_continuous(limit = c(0,1), breaks = seq(0,1,.05)) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.20, vjust = .5)) +
+  theme(axis.title.x = element_text(colour = "black")) +
+  theme(axis.title.y = element_text(colour = "gray10")) +
+  theme(plot.title = element_text(hjust = 0.5, colour = "midnightblue", face = "bold"))+
+  theme(text=element_text(family="serif")) +
+  labs(fill = "Rank #", colour = "gray10")
+p3
+```
+
+Create Plot 4: "Bottom 5 Global Inequality Index Scores by Country (2018)"
+```{r}
+#PLOT 4 - Bottom Five GII Scores
+plot4 = (RA_clean %>%
+  mutate(GIIRank = factor(gii_rank18), Country = factor(country)) %>%
+  group_by(GIIRank, Country) %>%
+  group_by(Country) %>%
+  arrange(desc(gii_2018))%>%
+  head(5)%>%
+  ggplot(aes(x = reorder(Country, gii_2018), y= gii_2018, fill = GIIRank))+
+  geom_bar(position = 'dodge', stat = 'identity', show.legend = FALSE, fill = "plum")+
+  geom_text(aes(label=gii_2018), position=position_dodge(width=0.9), 
+            vjust=-0.25, 
+            size = 3, 
+            family = "serif")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  ggtitle("Bottom 5 Global Inequality Index Scores \nby Country (2018)")+
+  xlab("Country")+
+  ylab("Global Inequality Index Score (0-1)")+
+  theme_minimal()
+) 
+p4 = plot4 + scale_y_continuous(limit = c(0,1), breaks = seq(0,1,.05)) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.20, vjust = .5)) +
+  theme(axis.title.x = element_text(colour = "black")) +
+  theme(axis.title.y = element_text(colour = "gray10")) +
+  theme(plot.title = element_text(hjust = 0.5, colour = "midnightblue", face = "bold"))+
+  theme(text=element_text(family="serif")) +
+  labs(fill = "Rank #", colour = "gray10")
+p4
+```
+
+## Combine Plots
+Create a combined plot to show top 5 GGG scores and bottom 5 GGG scores.
+```{r}
+GGG_plot = grid.arrange(p1, p2, ncol = 2)
+print(GGG_plot)
+
+ggsave("GGG_plot.png",
+  plot = GGG_plot,
+  dpi = 600,
+)
+```
+Create a combined plot to show top 5 GII scores and bottom 5 GII scores.
+```{r}
+GII_plot = grid.arrange(p3, p4, ncol = 2)
+
+ggsave("GII_plot.png",
+  plot = GII_plot,
+  dpi = 600,
+)
+```
+
+
+
+
+
+
